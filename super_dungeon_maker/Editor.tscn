@@ -1,0 +1,15 @@
+[gd_scene format=2]
+
+[node name="EditorNode" type="Node2D"]
+
+[node name="TileMap" type="TileMap" parent="."]
+format = 1
+
+[node name="Hand" type="Control" parent="."]
+margin_left = 32.0
+margin_top = 448.0
+margin_right = 992.0
+margin_bottom = 576.0
+__meta__ = {
+"_edit_use_anchors_": false
+}

@@ -1,0 +1,27 @@
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "super_dungeon_maker", "super_dungeon_maker.csproj", "{84192964-5778-45EF-BF2C-A9D710F764DF}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "fs", "fs\fs.fsproj", "{24799BF7-7DAA-4D3F-8B97-2699F250CF43}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		ExportDebug|Any CPU = ExportDebug|Any CPU
+		ExportRelease|Any CPU = ExportRelease|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{84192964-5778-45EF-BF2C-A9D710F764DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84192964-5778-45EF-BF2C-A9D710F764DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84192964-5778-45EF-BF2C-A9D710F764DF}.ExportDebug|Any CPU.ActiveCfg = ExportDebug|Any CPU
+		{84192964-5778-45EF-BF2C-A9D710F764DF}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
+		{84192964-5778-45EF-BF2C-A9D710F764DF}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
+		{84192964-5778-45EF-BF2C-A9D710F764DF}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
+		{24799BF7-7DAA-4D3F-8B97-2699F250CF43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24799BF7-7DAA-4D3F-8B97-2699F250CF43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24799BF7-7DAA-4D3F-8B97-2699F250CF43}.ExportDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24799BF7-7DAA-4D3F-8B97-2699F250CF43}.ExportDebug|Any CPU.Build.0 = Debug|Any CPU
+		{24799BF7-7DAA-4D3F-8B97-2699F250CF43}.ExportRelease|Any CPU.ActiveCfg = Debug|Any CPU
+		{24799BF7-7DAA-4D3F-8B97-2699F250CF43}.ExportRelease|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+EndGlobal
