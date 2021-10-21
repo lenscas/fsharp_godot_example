@@ -8,8 +8,8 @@
     <Reference Include="GodotSharp">
       <HintPath>../.mono/assemblies/Debug/GodotSharp.dll</HintPath>
     </Reference>
-    <!-- <Reference Include="netstandard" />
-    <PackageReference Include="FSharp.Json" Version="0.4.0" /> -->
+    <!-- <Reference Include="netstandard" /> -->
+    <PackageReference Include="FSharp.Json" Version="0.4.0" />
   </ItemGroup>
 
   <PropertyGroup>
@@ -27,10 +27,46 @@
     <!-- Add the Facades directory.  Not sure how else to do this. Necessary at least for .NET 4.5 -->
     <AssemblySearchPaths Condition="'$(BaseFrameworkPathOverrideForMono)' != ''">$(FrameworkPathOverride)/Facades;$(AssemblySearchPaths)</AssemblySearchPaths>
   </PropertyGroup>
-    <ItemGroup>
-    <Compile Include="card.fs" />
-    <Compile Include="nodes/HandFs.fs" />
-    <Compile Include="nodes/firstFs.fs" />
+  <!--generic extensions to Godot-->
+  <ItemGroup>
+    <Compile Include="defaults.fs" />
+    <Compile Include="NodeExtension.fs" />
   </ItemGroup>
+  <!--files related to http methods-->
+  <ItemGroup>
+    <Compile Include="client/poll.fs" />
+    <Compile Include="client/baseClient.fs" />
+    <Compile Include="client/login.fs" />
+    <Compile Include="client/dungeon.fs" />
+  </ItemGroup>
+  <!--Editor-->
+  <ItemGroup>
 
+    <Compile Include="card.fs" />
+    <Compile Include="hand.fs" />
+    <Compile Include="nodes/BonusBarFs.fs" />
+    <Compile Include="nodes/JoinButtonFs.fs" />
+    <Compile Include="nodes/HandFs.fs" />
+    <Compile Include="nodes/EditorFs.fs" />
+
+  </ItemGroup>
+  <!--guns-->
+  <ItemGroup>
+      <Compile Include="nodes/BulletFs.fs" />
+      <Compile Include="gun.fs" />
+  </ItemGroup>
+  <!-- interfaces-->
+  <ItemGroup>
+    <Compile Include="Enemy.fs" />
+  </ItemGroup>
+  <!--Nodes-->
+  <ItemGroup>
+
+    <Compile Include="nodes/MainMenuFs.fs" />
+    <Compile Include="nodes/firstFs.fs" />
+    <Compile Include="nodes/PlayerFs.fs" />
+    <Compile Include="nodes/BasicEnemyFs.fs" />
+    <Compile Include="nodes/DungeonFs.fs" />
+    <Compile Include="nodes/SceneManagerFs.fs" />
+  </ItemGroup>
 </Project>

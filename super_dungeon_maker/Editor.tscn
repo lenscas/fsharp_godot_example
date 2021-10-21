@@ -1,15 +1,132 @@
-[gd_scene format=2]
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Hand.cs" type="Script" id=1]
+[ext_resource path="res://Editor.cs" type="Script" id=2]
+[ext_resource path="res://BonusBar.cs" type="Script" id=3]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.933333, 0.0666667, 0.0666667, 1 )
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0.972549, 0.960784, 0.294118, 1 )
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 0.0196078, 0.615686, 0, 1 )
 
 [node name="EditorNode" type="Node2D"]
+script = ExtResource( 2 )
 
-[node name="TileMap" type="TileMap" parent="."]
+[node name="EnemyMap" type="TileMap" parent="."]
+cell_size = Vector2( 16, 16 )
 format = 1
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="DungeonMap" type="TileMap" parent="."]
+format = 1
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="Hand" type="Control" parent="."]
-margin_left = 32.0
+margin_left = 96.0
 margin_top = 448.0
-margin_right = 992.0
+margin_right = 1000.0
 margin_bottom = 576.0
+script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="BlocksButton" type="Button" parent="Hand"]
+margin_left = -80.0
+margin_right = -10.0
+margin_bottom = 20.0
+text = "Blocks"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="EnemiesButton" type="Button" parent="Hand"]
+margin_left = -80.0
+margin_top = 32.0
+margin_right = -10.0
+margin_bottom = 52.0
+text = "Enemies"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MiscButton" type="Button" parent="Hand"]
+margin_left = -80.0
+margin_top = 64.0
+margin_right = -10.0
+margin_bottom = 84.0
+text = "Misc"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DoneButton" type="Button" parent="."]
+margin_left = 896.0
+margin_top = 16.0
+margin_right = 960.0
+margin_bottom = 48.0
+text = "Done"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BonusBar" type="Control" parent="."]
+margin_left = 128.0
+margin_top = 24.0
+margin_right = 608.0
+margin_bottom = 48.0
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MinimunBar" type="ProgressBar" parent="BonusBar"]
+margin_left = 160.0
+margin_top = -8.0
+margin_right = 352.0
+margin_bottom = 24.0
+rect_pivot_offset = Vector2( 152, 16 )
+custom_styles/fg = SubResource( 1 )
+max_value = 24.0
+percent_visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DoneBar" type="ProgressBar" parent="BonusBar"]
+margin_left = 352.0
+margin_top = -8.0
+margin_right = 416.0
+margin_bottom = 24.0
+rect_pivot_offset = Vector2( 152, 16 )
+custom_styles/fg = SubResource( 2 )
+max_value = 8.0
+percent_visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bonus1Bar" type="ProgressBar" parent="BonusBar"]
+margin_left = 416.0
+margin_top = -8.0
+margin_right = 480.0
+margin_bottom = 24.0
+rect_pivot_offset = Vector2( 152, 16 )
+custom_styles/fg = SubResource( 3 )
+max_value = 8.0
+percent_visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="pressed" from="Hand/BlocksButton" to="Hand" method="OnBlocksPressed"]
+[connection signal="pressed" from="Hand/EnemiesButton" to="Hand" method="OnEnemiesPressed"]
+[connection signal="pressed" from="Hand/MiscButton" to="Hand" method="OnMiscPressed"]
+[connection signal="pressed" from="DoneButton" to="." method="onDoneButtonPressed"]
