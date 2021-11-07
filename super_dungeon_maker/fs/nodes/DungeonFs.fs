@@ -8,8 +8,8 @@ type DungeonFs() as this =
 
     let roomSize = 64
     let openingSize = 14
-    let enemySpots = 4
-
+    let itemSpots = 4
+    let endLocation = (3, 3)
     let wall = 0
     let floor = 1
 
@@ -24,17 +24,26 @@ type DungeonFs() as this =
     let hpBar =
         this.getNode<ProgressBar> "./GuiLayer/HealthBar"
 
-    member public this.StartDungeon(dungeon: System.Collections.Generic.Dictionary<(int * int), Block>) =
+    member public this.StartDungeon (dungeon: System.Collections.Generic.Dictionary<(int * int), Block>) after =
         let map = tileMap.Value
         map.Clear()
         hpBar.Value.Visible <- true
+
+        let endBlock =
+            dungeon.Values
+            |> Seq.filter (fun x -> endLocation |> x.Items.ContainsKey |> not)
+            |> Seq.filter (fun x ->
+                Misc.Start
+                |> Items.Misc
+                |> x.Items.ContainsValue
+                |> not)
+            |> Rand.randomFrom
+
+        endBlock.Items.Add(endLocation, Misc.End |> Items.Misc)
+
         for ((x, y), block) in dungeon |> Seq.map (fun x -> x.Key, x.Value) do
 
             let (expandedX, expandedY) = (x * roomSize, y * roomSize)
-
-            camera.Value.GlobalPosition <-
-                Vector2((float32 expandedX) + (float32 roomSize) / 2f, (float32 expandedY) + (float32 roomSize) / 2f)
-                |> map.MapToWorld
 
             let toCheck =
                 seq { roomSize / 2 - openingSize / 2 .. roomSize / 2 + openingSize / 2 }
@@ -74,23 +83,48 @@ type DungeonFs() as this =
 
                     map.SetCell(tileX, tileY, toDraw)
 
-            for ((enemyX, enemyY), enemy) in block.Enemies |> Seq.map (fun x -> x.Key, x.Value) do
-                let (expandedEnemyX, expandedEnemyY) =
-                    expandedX + (enemyX * (roomSize / enemySpots)), expandedY + (enemyY * (roomSize / enemySpots))
+            let z = roomSize / itemSpots
 
-                let enemyScene =
-                    enemy |> EnemyKinds.toNode |> loadEnemyNode
+            for ((itemX, itemY), item) in block.Items |> Seq.map (fun x -> x.Key, x.Value) do
 
-                let enemyNode = enemyScene.Instance() :?> BasicEnemyFs
+                let (expandedItemX, expandedItemY) =
+                    expandedX + (itemX * z) + (z / 2), expandedY + (itemY * z) + (z / 2)
 
-                enemyNode.GlobalPosition <-
-                    Vector2(expandedEnemyX |> float32, expandedEnemyY |> float32)
-                    |> map.MapToWorld
+                match item with
+                | Items.Enemy enemy ->
+                    let enemyScene =
+                        enemy |> EnemyKinds.toNode |> loadEnemyNode
 
-                enemyNode.Configure camera.Value navigator.Value
+                    let enemyNode = enemyScene.Instance() :?> BasicEnemyFs
 
-                this.AddChild(enemyNode)
-                ()
+                    enemyNode.GlobalPosition <-
+                        Vector2(expandedItemX |> float32, expandedItemY |> float32)
+                        |> map.MapToWorld
+
+                    enemyNode.Configure camera.Value navigator.Value
+
+                    this.AddChild(enemyNode)
+                | Items.Misc x ->
+                    let miscScene = x |> Misc.toNode |> loadMiscNode
+                    let miscNode = miscScene.Instance() :?> Node2D
+
+                    miscNode.GlobalPosition <-
+                        Vector2(expandedItemX |> float32, expandedItemY |> float32)
+                        |> map.MapToWorld
+
+                    match x with
+                    | Start ->
+                        camera.Value.GlobalPosition <-
+                            Vector2(
+                                (float32 expandedX) + (float32 roomSize) / 2f,
+                                (float32 expandedY) + (float32 roomSize) / 2f
+                            )
+                            |> map.MapToWorld
+                    | End ->
+                        let endNode = miscNode :?> EndFs
+                        endNode.RunOnReached <- after
+
+                    this.AddChild miscNode
 
         camera.Value.EnableCam(fun x -> hpBar.Value.Value <- x)
         ()

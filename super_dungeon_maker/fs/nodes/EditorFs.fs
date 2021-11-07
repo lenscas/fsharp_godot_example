@@ -15,9 +15,9 @@ type EditorFs() as this =
             float
             >> bonusBar.Value.SetTo
             >> bonusBar.Value.GetCurrentState
-            >> function
-                | NotEnough -> onDoneButton.Value.Disabled <- true
-                | _ -> onDoneButton.Value.Disabled <- false
+            >> (=) NotEnough
+            >> fun x -> x && () |> hand.Value.HasPlacedStart |> not
+            >> fun notEnough -> onDoneButton.Value.Disabled <- notEnough
 
     member val FuncAfterDone = None with get, set
 

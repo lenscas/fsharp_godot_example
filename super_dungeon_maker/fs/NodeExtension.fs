@@ -11,9 +11,19 @@ module GDUtils =
 
     let loadBlocks name = loadTexture ("blocks/" + name)
     let loadEnemies name = loadTexture ("entities/" + name)
+    let loadMisc name = loadTexture ("misc/" + name)
+
+
+    let loadNode path =
+        GD.Load<PackedScene>("res://prefabs/" + path + ".tscn")
+
+    let loadScene name =
+        GD.Load<PackedScene>("res://scenes/" + name + ".tscn")
 
     let loadEnemyNode name =
         GD.Load<PackedScene>("res://prefabs/" + name + ".tscn")
+
+    let loadMiscNode name = loadNode ("misc/" + name)
 
     let ToParams a =
         let x = new Collections.Array()
@@ -83,12 +93,11 @@ module GDUtils =
         path
         |> readFile
         |> godotResultToWrapped<exn, _>
-        |> Result.bind
-            (fun x ->
-                try
-                    x |> Json.deserialize<'t> |> Ok
-                with
-                | x -> x |> Custom |> Result.Error)
+        |> Result.bind (fun x ->
+            try
+                x |> Json.deserialize<'t> |> Ok
+            with
+            | x -> x |> Custom |> Result.Error)
 
     let OnInputMouseButt func (event: InputEvent) =
         match event with
@@ -104,6 +113,12 @@ module GDUtils =
             && firstX = secondX)
 
     type Node with
+        member this.LoadScene<'a when 'a :> Node> scene =
+            let scene = loadScene scene
+            let node = scene.Instance() :?> 'a
+            this.AddChild node
+            node
+
         member this.getNode<'a when 'a :> Node and 'a: not struct>(path: string) =
             lazy (this.GetNode<'a>(new NodePath(path)))
 

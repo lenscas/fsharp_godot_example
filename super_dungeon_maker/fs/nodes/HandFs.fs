@@ -21,7 +21,7 @@ type HandFs() as this =
     let mutable drawnHand: List<TextureButton> = []
 
     let dungeonMap = this.getNode<TileMap> "../DungeonMap"
-    let enemyMap = this.getNode<TileMap> "../EnemyMap"
+    let itemMap = this.getNode<TileMap> "../EnemyMap"
 
     let showBlocks = this.getNode<Button> "./BlocksButton"
     let showEnemies = this.getNode<Button> "./EnemiesButton"
@@ -81,7 +81,7 @@ type HandFs() as this =
             match toShowState with
             | ToDisplay.Enemies -> Hand.DrawHand enemyHand (EnemyKinds.toPicture >> loadEnemies)
             | ToDisplay.Blocks -> Hand.DrawHand blockHand (BlockKinds.toPicture >> loadBlocks)
-            | ToDisplay.Misc -> Hand.DrawHand miscHand (Misc.toSprite >> loadBlocks)
+            | ToDisplay.Misc -> Hand.DrawHand miscHand (Misc.toPicture >> loadMisc)
 
         drawer (fun x -> ("pressed", this, "ClickedItem", (SParam x))) this
 
@@ -114,19 +114,38 @@ type HandFs() as this =
             match position with
             | None -> None
             | Some (mousePos, roomCoordinateRounded, roomCoordinate) ->
-                match toShowState with
-                | ToDisplay.Blocks ->
+                let toInsert =
+                    match toShowState with
+                    | ToDisplay.Blocks -> Ok Blocks
+                    | ToDisplay.Enemies ->
+                        let insertEnemy =
+                            enemyHand |> Hand.getSelected |> fun (_, v) -> v
+
+                        Result.Error(Items.Enemy insertEnemy, insertEnemy |> EnemyKinds.toPicture |> loadEnemies)
+                    | ToDisplay.Misc ->
+                        let insertMisc =
+                            miscHand |> Hand.getSelected |> fun (_, v) -> v
+
+                        Result.Error(Items.Misc insertMisc, insertMisc |> Misc.toPicture |> loadMisc)
+
+                match toInsert with
+                | Ok _ ->
                     let insertBlockKind =
                         blockHand |> Hand.getSelected |> fun (_, v) -> v
 
                     let insertBlock = insertBlockKind |> BlockKinds.toBlock
 
+                    //if there are no neighbours at all, then false
+                    //if one or more of the neigbours don't have openings that line up with the openings of this block, then false
+                    //else, true
                     let hasNeighbour =
                         drawnMap
                         |> Seq.filter (fun x -> x.Key <> roomCoordinateRounded)
                         |> Seq.filter (fun x -> IsNeighbour x.Key roomCoordinateRounded)
                         |> Seq.map (fun x -> (Direction.toDirection x.Key roomCoordinateRounded), x.Value)
-                        |> Seq.exists (fun (dir, value) -> Block.fitBlocks value insertBlock dir)
+                        |> Seq.map (fun (dir, value) -> Block.fitBlocks value insertBlock dir)
+                        |> Set
+                        |> (=) (Set [ true ])
 
                     if drawnMap.Count <= 0
                        || hasNeighbour
@@ -146,12 +165,9 @@ type HandFs() as this =
                         Some(texture, location, dungeonMap.Value.CellSize)
                     else
                         None
-                | ToDisplay.Enemies ->
-                    let insertEnemy =
-                        enemyHand |> Hand.getSelected |> fun (_, v) -> v
-
+                | Result.Error (toInsert, texture) ->
                     if drawnMap.ContainsKey roomCoordinateRounded then
-                        let worldEnemyLocation = enemyMap.Value.WorldToMap mousePos
+                        let worldEnemyLocation = itemMap.Value.WorldToMap mousePos
 
                         let tileEnemyLocation =
                             ((worldEnemyLocation.x
@@ -161,23 +177,20 @@ type HandFs() as this =
                               |> Mathf.Round
                               |> System.Convert.ToInt32) % 4)
 
-                        let enemies = drawnMap.[roomCoordinateRounded].Enemies
+                        let enemies = drawnMap.[roomCoordinateRounded].Items
 
                         if tileEnemyLocation |> enemies.ContainsKey |> not then
-                            enemies.Add(tileEnemyLocation, insertEnemy)
+                            enemies.Add(tileEnemyLocation, toInsert)
 
-                            let texture =
-                                insertEnemy |> EnemyKinds.toPicture |> loadEnemies
 
                             let location =
-                                enemyMap.Value.MapToWorld worldEnemyLocation
+                                itemMap.Value.MapToWorld worldEnemyLocation
 
-                            Some(texture, location, enemyMap.Value.CellSize)
+                            Some(texture, location, itemMap.Value.CellSize)
                         else
                             None
                     else
                         None
-                | ToDisplay.Misc -> None
 
         match res with
         | None -> ()
@@ -195,10 +208,20 @@ type HandFs() as this =
             drawnMap.Values
             |> Seq.sumBy (fun x ->
                 -5
-                + (x.Enemies.Values |> Seq.sumBy EnemyKinds.toCost))
+                + (x.Items.Values
+                   |> Seq.sumBy (function
+                       | Items.Enemy x -> EnemyKinds.toCost x
+                       | Items.Misc x -> Misc.toCost x)))
 
         this.UpdateCostBar z
 
+    member this.HasPlacedStart() =
+        drawnMap.Values
+        |> Seq.collect (fun x -> x.Items.Values)
+        |> Seq.choose (function
+            | Items.Enemy x -> None
+            | Items.Misc x -> Some x)
+        |> Seq.contains Misc.Start
 
     member this.OnBlocksPressed() =
         showMaker showBlocks showEnemies showMisc ToDisplay.Blocks

@@ -11,13 +11,11 @@ type BonusState =
 type BonusBarFs() as this =
     inherit Control()
 
-    let minimunBar =
-        this.getNode<ProgressBar> ("./MinimunBar")
+    let minimunBar = this.getNode<ProgressBar> "./MinimunBar"
 
-    let doneBar = this.getNode<ProgressBar> ("./DoneBar")
+    let doneBar = this.getNode<ProgressBar> "./DoneBar"
 
-    let bonusBar =
-        this.getNode<ProgressBar> ("./Bonus1Bar")
+    let bonusBar = this.getNode<ProgressBar> "./Bonus1Bar"
 
     let mutable currentValue = 0.
 
@@ -35,18 +33,20 @@ type BonusBarFs() as this =
                 doneBar.Value.Value <- doneBar.Value.MaxValue
                 left - doneBar.Value.MaxValue
             else
-                minimunBar.Value.Value <- left
+                doneBar.Value.Value <- left
                 0.
 
         if bonusBar.Value.MaxValue <= left then
-            doneBar.Value.Value <- doneBar.Value.MaxValue
+            bonusBar.Value.Value <- doneBar.Value.MaxValue
+        else
+            bonusBar.Value.Value <- left
 
     member public _.AddTo v =
         currentValue <- currentValue + v
         update ()
 
     member public _.SetTo v =
-        currentValue <- currentValue + v
+        currentValue <- v
         update ()
 
     member public _.GetCurrentState() =

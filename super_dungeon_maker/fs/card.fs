@@ -1,11 +1,24 @@
 namespace super_dungeon_maker
 
-type Misc = | Start
+type Misc =
+    | Start
+    | End
 
 module Misc =
-    let toSprite =
+    let toPicture =
         function
         | Start -> "start"
+        | End -> "end"
+
+    let toCost =
+        function
+        | Start
+        | End -> 0
+
+    let toNode =
+        function
+        | Start -> "Start"
+        | End -> "End"
 
 type Direction =
     | Up
@@ -55,9 +68,14 @@ module EnemyKinds =
         | EnemyKinds.BasicEnemy -> 20
         | x -> x |> handleBadEnumValue |> raise
 
+
+type Items =
+    | Enemy of EnemyKinds
+    | Misc of Misc
+
 type Block =
     { Openings: List<Direction>
-      Enemies: System.Collections.Generic.Dictionary<int * int, EnemyKinds> }
+      Items: System.Collections.Generic.Dictionary<int * int, Items> }
 
 module Block =
 
@@ -96,7 +114,7 @@ module BlockKinds =
             | x -> x |> handleBadEnumValue |> raise
 
         { Openings = openings
-          Enemies = System.Collections.Generic.Dictionary() }
+          Items = System.Collections.Generic.Dictionary() }
 
     let toPicture =
         function

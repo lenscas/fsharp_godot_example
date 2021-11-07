@@ -29,6 +29,7 @@
   </PropertyGroup>
   <!--generic extensions to Godot-->
   <ItemGroup>
+    <Compile Include="rand.fs" />
     <Compile Include="defaults.fs" />
     <Compile Include="NodeExtension.fs" />
   </ItemGroup>
@@ -65,6 +66,7 @@
     <Compile Include="nodes/MainMenuFs.fs" />
     <Compile Include="nodes/firstFs.fs" />
     <Compile Include="nodes/PlayerFs.fs" />
+    <Compile Include="nodes/EndFs.fs" />
     <Compile Include="nodes/BasicEnemyFs.fs" />
     <Compile Include="nodes/DungeonFs.fs" />
     <Compile Include="nodes/SceneManagerFs.fs" />
