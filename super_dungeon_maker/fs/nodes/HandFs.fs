@@ -94,18 +94,21 @@ type HandFs() as this =
             match event with
             | :? InputEventMouseButton as button ->
                 if button.ButtonIndex = (int) ButtonList.Left then
-                    let worldPosition =
-                        dungeonMap.Value.WorldToMap button.Position
+                    if button.Position.y > this.RectGlobalPosition.y then
+                        None
+                    else
+                        let worldPosition =
+                            dungeonMap.Value.WorldToMap button.Position
 
-                    let roomCoordinateRounded =
-                        (worldPosition.x
-                         |> Mathf.Round
-                         |> System.Convert.ToInt32,
-                         worldPosition.y
-                         |> Mathf.Round
-                         |> System.Convert.ToInt32)
+                        let roomCoordinateRounded =
+                            (worldPosition.x
+                             |> Mathf.Round
+                             |> System.Convert.ToInt32,
+                             worldPosition.y
+                             |> Mathf.Round
+                             |> System.Convert.ToInt32)
 
-                    Some(button.Position, roomCoordinateRounded, dungeonMap.Value.WorldToMap button.Position)
+                        Some(button.Position, roomCoordinateRounded, dungeonMap.Value.WorldToMap button.Position)
                 else
                     None
             | x -> None
