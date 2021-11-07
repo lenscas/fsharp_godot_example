@@ -81,6 +81,7 @@ module Block =
 
     let fitBlocks blockA blockB how =
         let openingA = (blockA.Openings |> List.contains how)
+        Godot.GD.Print "-----"
         Godot.GD.Print how
         Godot.GD.Print openingA
 
@@ -89,7 +90,7 @@ module Block =
             |> List.contains (Direction.oposite how)
 
         Godot.GD.Print openingB
-        openingA && openingB
+        openingA = openingB
 
 type BlockKinds =
     | AllOpen = 0
