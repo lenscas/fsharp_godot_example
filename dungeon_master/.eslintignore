@@ -1,6 +1,0 @@
-# .query files should be generated rather than handwritten.
-src/**/*.queries.ts
-# the js code should be generated rather than handwritten
-migrations
-# this one should be obvious
-node_modules
