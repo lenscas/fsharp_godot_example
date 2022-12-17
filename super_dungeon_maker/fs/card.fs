@@ -113,7 +113,6 @@ module BlockKinds =
             | BlockKinds.UpAndDown -> [ Up; Down ]
             | BlockKinds.LeftAndRight -> [ Left; Right ]
             | x -> x |> handleBadEnumValue |> raise
-
         { Openings = openings
           Items = System.Collections.Generic.Dictionary() }
 

@@ -1,18 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Godot.NET.Sdk/3.2.3">
+  <ItemGroup>
+    <ProjectReference Include="fs\fs.fsproj" />
+  </ItemGroup>
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-    <DisableImplicitFSharpCoreReference>true</DisableImplicitFSharpCoreReference>
+    <TargetFramework>net472</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="System.Runtime" Version="4.3.1" />
-    <ProjectReference Include="../../GodotTypeProvider/src/GodotTypeProvider.Runtime/GodotTypeProvider.Runtime.fsproj" />
     <Reference Include="GodotSharp">
-      <HintPath>../.mono/assemblies/Debug/GodotSharp.dll</HintPath>
+      <HintPath>.mono/assemblies/Debug/GodotSharp.dll</HintPath>
     </Reference>
-    <!-- <Reference Include="netstandard" /> -->
-    <PackageReference Include="FSharp.Core" Version="6.0.4" />
-    <PackageReference Include="FSharp.Json" Version="0.4.0" />
+    <Reference Include="netstandard" />
   </ItemGroup>
 
   <PropertyGroup>
@@ -24,55 +22,12 @@
     <BaseFrameworkPathOverrideForMono Condition="'$(BaseFrameworkPathOverrideForMono)' == '' AND '$(TargetIsMono)' == 'true' AND EXISTS('/Library/Frameworks/Mono.framework/Versions/Current/lib/mono')">/Library/Frameworks/Mono.framework/Versions/Current/lib/mono</BaseFrameworkPathOverrideForMono>
     <BaseFrameworkPathOverrideForMono Condition="'$(BaseFrameworkPathOverrideForMono)' == '' AND '$(TargetIsMono)' == 'true' AND EXISTS('/usr/lib/mono')">/usr/lib/mono</BaseFrameworkPathOverrideForMono>
     <BaseFrameworkPathOverrideForMono Condition="'$(BaseFrameworkPathOverrideForMono)' == '' AND '$(TargetIsMono)' == 'true' AND EXISTS('/usr/local/lib/mono')">/usr/local/lib/mono</BaseFrameworkPathOverrideForMono>
+
+    <!-- If we found Mono reference assemblies, then use them -->
     <FrameworkPathOverride Condition="'$(BaseFrameworkPathOverrideForMono)' != '' AND '$(TargetFramework)' == 'net472'">$(BaseFrameworkPathOverrideForMono)/4.7.2-api</FrameworkPathOverride>
     <EnableFrameworkPathOverride Condition="'$(BaseFrameworkPathOverrideForMono)' != ''">true</EnableFrameworkPathOverride>
 
     <!-- Add the Facades directory.  Not sure how else to do this. Necessary at least for .NET 4.5 -->
     <AssemblySearchPaths Condition="'$(BaseFrameworkPathOverrideForMono)' != ''">$(FrameworkPathOverride)/Facades;$(AssemblySearchPaths)</AssemblySearchPaths>
   </PropertyGroup>
-  <!--generic extensions to Godot-->
-  <ItemGroup>
-    <Compile Include="typeProviderInitializer.fs" />
-    <Compile Include="rand.fs" />
-    <Compile Include="defaults.fs" />
-    <Compile Include="NodeExtension.fs" />
-  </ItemGroup>
-  <!--files related to http methods-->
-  <ItemGroup>
-    <Compile Include="client/poll.fs" />
-    <Compile Include="client/baseClient.fs" />
-    <Compile Include="client/login.fs" />
-    <Compile Include="client/dungeon.fs" />
-  </ItemGroup>
-  <!--Editor-->
-  <ItemGroup>
-
-    <Compile Include="card.fs" />
-    <Compile Include="hand.fs" />
-    <Compile Include="nodes/BonusBarFs.fs" />
-    <Compile Include="nodes/JoinButtonFs.fs" />
-    <Compile Include="nodes/HandFs.fs" />
-    <Compile Include="nodes/EditorFs.fs" />
-
-  </ItemGroup>
-  <!--guns-->
-  <ItemGroup>
-      <Compile Include="nodes/BulletFs.fs" />
-      <Compile Include="gun.fs" />
-  </ItemGroup>
-  <!-- interfaces-->
-  <ItemGroup>
-    <Compile Include="Enemy.fs" />
-  </ItemGroup>
-  <!--Nodes-->
-  <ItemGroup>
-
-    <Compile Include="nodes/MainMenuFs.fs" />
-    <Compile Include="nodes/firstFs.fs" />
-    <Compile Include="nodes/PlayerFs.fs" />
-    <Compile Include="nodes/EndFs.fs" />
-    <Compile Include="nodes/BasicEnemyFs.fs" />
-    <Compile Include="nodes/DungeonFs.fs" />
-    <Compile Include="nodes/SceneManagerFs.fs" />
-  </ItemGroup>
 </Project>
