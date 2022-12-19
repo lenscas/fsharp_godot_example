@@ -18,5 +18,5 @@ Other than that: Feel free to explore the code, see how I did things and copy wh
 
 [godot-fsharp-tools](https://github.com/willnationsdev/godot-fsharp-tools) : This Godot plugin makes integrating F# code with Godot a breeze as it automates the boilerplate.
 
-[F# discord (unoficial)](https://discord.gg/w5BW3DUrEA) the guys here helped me A LOT while learning F#. SHOUT OUT TO THEM!
+[F# discord (unofficial)](https://discord.gg/w5BW3DUrEA) the guys here helped me A LOT while learning F#. SHOUT OUT TO THEM!
 
