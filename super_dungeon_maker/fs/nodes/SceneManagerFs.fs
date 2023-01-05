@@ -6,8 +6,7 @@ open GDUtils
 type SceneManagerFs() as this =
     inherit Node2D()
 
-    let mainMenu =
-        fun () -> this.LoadScene<MainMenuFs> "MainMenu" //() this.getNode<MainMenuFs> "./MainMenu"
+    let mainMenu = fun () -> this.LoadScene<MainMenuFs> "MainMenu" //() this.getNode<MainMenuFs> "./MainMenu"
 
     let editor =
         fun () -> this.LoadScene<EditorFs> "Editor"

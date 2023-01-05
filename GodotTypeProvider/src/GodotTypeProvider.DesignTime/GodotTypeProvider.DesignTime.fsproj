@@ -7,6 +7,9 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GodotSharp">
+      <HintPath>../../../super_dungeon_maker/.mono/assemblies/Debug/GodotSharp.dll</HintPath>
+    </Reference>
     <Compile Include="..\..\paket-files\fsprojects\FSharp.TypeProviders.SDK\src\ProvidedTypes.fsi">
       <Paket>True</Paket>
       <Link>paket-files/ProvidedTypes.fsi</Link>
@@ -32,6 +35,9 @@
       <!-- This excludes FSharp.Core.xml and FSharp.Core.resources.dll while referencing the right FSharp.Core.dll version -->
       <ExcludeAssets>runtime;contentFiles</ExcludeAssets>
     </PackageReference>
+    <Reference Include="FSharp.Json" Version="0.4.1">
+      <HintPath>"..\..\paket-files\FSharp.Json"</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

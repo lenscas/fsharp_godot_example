@@ -10,7 +10,7 @@
       "fs/1.0.0": {
         "dependencies": {
           "FSharp.Core": "6.0.4",
-          "FSharp.Json": "0.4.0",
+          "FSharp.Json": "0.4.1",
           "GodotTypeProvider.Runtime": "1.0.0",
           "System.Runtime": "4.3.1",
           "GodotSharp": "1.0.0.0"
@@ -68,14 +68,14 @@
           }
         }
       },
-      "FSharp.Json/0.4.0": {
+      "FSharp.Json/0.4.1": {
         "dependencies": {
           "FSharp.Core": "6.0.4"
         },
         "runtime": {
           "lib/netstandard2.0/FSharp.Json.dll": {
-            "assemblyVersion": "0.4.0.0",
-            "fileVersion": "0.4.0.0"
+            "assemblyVersion": "0.4.1.0",
+            "fileVersion": "0.4.1.0"
           }
         }
       },
@@ -89,7 +89,8 @@
       },
       "GodotTypeProvider.Runtime/1.0.0": {
         "dependencies": {
-          "FSharp.Core": "6.0.4"
+          "FSharp.Core": "6.0.4",
+          "FSharp.Json": "0.4.1"
         },
         "runtime": {
           "GodotTypeProvider.Runtime.dll": {}
@@ -118,12 +119,12 @@
       "path": "fsharp.core/6.0.4",
       "hashPath": "fsharp.core.6.0.4.nupkg.sha512"
     },
-    "FSharp.Json/0.4.0": {
+    "FSharp.Json/0.4.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-3QchEhViQdnvJQzVG7M/CIgdCZhDJw4ZzFKMfLqb/j1cucxcUcXvIMxf6rV0ktFn9mmkmw9WOOuIsrG012vkUg==",
-      "path": "fsharp.json/0.4.0",
-      "hashPath": "fsharp.json.0.4.0.nupkg.sha512"
+      "sha512": "sha512-1vxUbXSN9bXRZCaj/Vau3AYT0kTBD717eF4M7J3cUjNAzyT36zD6mmN9tkf17r2k3/qv/S8Fc5bEsGtqKqtV4g==",
+      "path": "fsharp.json/0.4.1",
+      "hashPath": "fsharp.json.0.4.1.nupkg.sha512"
     },
     "Microsoft.NETCore.Platforms/1.1.1": {
       "type": "package",

@@ -9,6 +9,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="System.Runtime" Version="4.3.1" />
+    <PackageReference Include="FSharp.Json" Version="0.4.1" />
     <Reference Include="GodotSharp">
       <HintPath>.mono/assemblies/Debug/GodotSharp.dll</HintPath>
     </Reference>

@@ -3,6 +3,15 @@ namespace super_dungeon_maker
 open Godot
 open GDUtils
 
+open GodotTypeProvider
+
+type EditorScene = GodotTypeProvider.CreateRootNode<Test.GodotProj.Editor>
+
+// type TestFS() = 
+    // inherit EditorScene()
+// 
+    // member _.test() = GD.Print("nice")
+
 type EditorFs() as this =
     inherit Node2D()
 
@@ -10,7 +19,9 @@ type EditorFs() as this =
     let bonusBar = this.getNode<BonusBarFs> "./BonusBar"
     let onDoneButton = this.getNode<Button> "./DoneButton"
 
-    override _._Ready() =
+    override this._Ready() =
+        GD.Print(EditorScene.debugProperty)
+        //GD.Print this.Hand.Value
         hand.Value.UpdateCostBar <-
             float
             >> bonusBar.Value.SetTo

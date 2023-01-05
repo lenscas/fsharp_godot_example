@@ -6,6 +6,8 @@ nuget FSharp.Core 6.0.4
 github fsprojects/FSharp.TypeProviders.SDK src/ProvidedTypes.fsi
 github fsprojects/FSharp.TypeProviders.SDK src/ProvidedTypes.fs
 
+nuget FSharp.Json
+
 group Test
     source https://api.nuget.org/v3/index.json
 

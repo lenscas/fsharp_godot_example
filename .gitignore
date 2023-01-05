@@ -1,7 +1,11 @@
 /super_dungeon_maker/.mono
+/super_dungeon_maker/bin
 /super_dungeon_maker/fs/.mono
 /super_dungeon_maker/fs/obj
+/super_dungeon_maker/fs/bin
 /super_dungeon_maker/obj
 /dungeon_master/node_modules
 /dungeon_master/database.json
 /dungeon_master/postgres.json
+/super_dungeon_maker/fs/log.txt
+/super_dungeon_maker/log.txt

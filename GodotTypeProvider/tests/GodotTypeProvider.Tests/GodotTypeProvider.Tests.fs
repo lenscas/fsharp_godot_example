@@ -1,7 +1,7 @@
 module GodotTypeProviderTests
 
 let lol = ()
-// open MyNamespace
+open MyNamespace
 // open NUnit.Framework
 
 // [<Test>]
@@ -12,13 +12,11 @@ let lol = ()
 // let ``Constructor with parameter should create instance`` () =
 //     Assert.AreEqual("override", MyType("override").InnerState)
 
-// [<Test>]
-// let ``Method with ReflectedDefinition parameter should get its name`` () =
-//     let myValue = 2
-//     Assert.AreEqual("myValue", MyType.NameOf(myValue))
+//[<Test>]
+//let ``Method with ReflectedDefinition parameter should get its name`` () =
 
-// type Generative2 = GodotTypeProvider.GenerativeProvider<2>
-// type Generative4 = GodotTypeProvider.GenerativeProvider<4>
+//type Generative2 = GodotTypeProvider.GenerativeProvider<"../../../super_dungeon_maker/project.godot">
+//type Generative4 = GodotTypeProvider.GenerativeProvider<4>
 
 // [<Test>]
 // let ``Can access properties of generative provider 2`` () =
