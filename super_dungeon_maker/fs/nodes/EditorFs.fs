@@ -3,36 +3,23 @@ namespace super_dungeon_maker
 open Godot
 open GDUtils
 
-open GodotTypeProvider
+type AfterDone = System.Collections.Generic.Dictionary<(int * int),Block> -> unit
 
-type EditorScene = GodotTypeProvider.CreateRootNode<Test.GodotProj.Editor>
+type EditorFs() =
+    inherit EditorNodeScene<AfterDone>()
 
-// type TestFS() = 
-    // inherit EditorScene()
-// 
-    // member _.test() = GD.Print("nice")
-
-type EditorFs() as this =
-    inherit Node2D()
-
-    let hand = this.getNode<HandFs> "./Hand"
-    let bonusBar = this.getNode<BonusBarFs> "./BonusBar"
-    let onDoneButton = this.getNode<Button> "./DoneButton"
+    override this.Setup (a) = this.FuncAfterDone <- a
 
     override this._Ready() =
-        GD.Print(EditorScene.debugProperty)
-        //GD.Print this.Hand.Value
-        hand.Value.UpdateCostBar <-
+        this.Hand.Value.UpdateCostBar <-
             float
-            >> bonusBar.Value.SetTo
-            >> bonusBar.Value.GetCurrentState
+            >> this.BonusBar.Value.SetTo
+            >> this.BonusBar.Value.GetCurrentState
             >> (=) NotEnough
-            >> fun x -> x || () |> hand.Value.HasPlacedStart |> not
-            >> fun notEnough -> onDoneButton.Value.Disabled <- notEnough
+            >> fun x -> x || () |> this.Hand.Value.HasPlacedStart |> not
+            >> fun notEnough -> this.DoneButton.UnwrappedNode.Disabled <- notEnough
 
-    member val FuncAfterDone = None with get, set
+    member val FuncAfterDone = ignore with get, set
 
     member this.onDoneButtonPressed() =
-        match this.FuncAfterDone with
-        | Some x -> () |> hand.Value.GetMap |> x
-        | None -> ()
+        () |> this.Hand.Value.GetMap |> this.FuncAfterDone 

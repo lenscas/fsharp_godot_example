@@ -14,4 +14,7 @@
       <HintPath>.mono/assemblies/Debug/GodotSharp.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <Target Name="CreateScenes" BeforeTargets="Build">
+    <Exec Command="dotnet run --project ../GodotSceneIntegration/GodotSceneIntegration.fsproj -- -g ./project.godot -n ./fs/generatedNodes/ -s super_dungeon_maker" />
+  </Target>
 </Project>

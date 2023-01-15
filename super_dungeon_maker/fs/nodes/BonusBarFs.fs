@@ -9,37 +9,31 @@ type BonusState =
     | WithBonus
 
 type BonusBarFs() as this =
-    inherit Control()
-
-    let minimunBar = this.getNode<ProgressBar> "./MinimunBar"
-
-    let doneBar = this.getNode<ProgressBar> "./DoneBar"
-
-    let bonusBar = this.getNode<ProgressBar> "./Bonus1Bar"
+    inherit BonusBarScene()
 
     let mutable currentValue = 0.
 
     let update () =
         let left =
-            if minimunBar.Value.MaxValue <= currentValue then
-                minimunBar.Value.Value <- minimunBar.Value.MaxValue
-                currentValue - minimunBar.Value.MaxValue
+            if this.MinimunBar.UnwrappedNode.MaxValue <= currentValue then
+                this.MinimunBar.UnwrappedNode.Value <- this.MinimunBar.UnwrappedNode.MaxValue
+                currentValue - this.MinimunBar.UnwrappedNode.MaxValue
             else
-                minimunBar.Value.Value <- currentValue
+                this.MinimunBar.UnwrappedNode.Value <- currentValue
                 0.
 
         let left =
-            if doneBar.Value.MaxValue <= left then
-                doneBar.Value.Value <- doneBar.Value.MaxValue
-                left - doneBar.Value.MaxValue
+            if this.DoneBar.UnwrappedNode.MaxValue <= left then
+                this.DoneBar.UnwrappedNode.Value <- this.DoneBar.UnwrappedNode.MaxValue
+                left - this.DoneBar.UnwrappedNode.MaxValue
             else
-                doneBar.Value.Value <- left
+                this.DoneBar.UnwrappedNode.Value <- left
                 0.
 
-        if bonusBar.Value.MaxValue <= left then
-            bonusBar.Value.Value <- doneBar.Value.MaxValue
+        if this.Bonus1Bar.UnwrappedNode.MaxValue <= left then
+            this.Bonus1Bar.UnwrappedNode.Value <- this.DoneBar.UnwrappedNode.MaxValue
         else
-            bonusBar.Value.Value <- left
+            this.Bonus1Bar.UnwrappedNode.Value <- left
 
     member public _.AddTo v =
         currentValue <- currentValue + v
@@ -51,13 +45,13 @@ type BonusBarFs() as this =
 
     member public _.GetCurrentState() =
 
-        if minimunBar.Value.MaxValue <= currentValue then
-            let left = currentValue - minimunBar.Value.MaxValue
+        if this.MinimunBar.UnwrappedNode.MaxValue <= currentValue then
+            let left = currentValue - this.MinimunBar.UnwrappedNode.MaxValue
 
-            if doneBar.Value.MaxValue <= left then
-                let left = left - doneBar.Value.MaxValue
+            if this.DoneBar.UnwrappedNode.MaxValue <= left then
+                let left = left - this.DoneBar.UnwrappedNode.MaxValue
 
-                if bonusBar.Value.MaxValue <= left then
+                if this.Bonus1Bar.UnwrappedNode.MaxValue <= left then
                     WithBonus
                 else
                     Succeeded

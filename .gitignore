@@ -9,3 +9,4 @@
 /dungeon_master/postgres.json
 /super_dungeon_maker/fs/log.txt
 /super_dungeon_maker/log.txt
+/super_dungeon_maker/fs/generatedNodes/*.fs

@@ -7,7 +7,6 @@
 
   <ItemGroup>
     <PackageReference Include="System.Runtime" Version="4.3.1" />
-    <ProjectReference Include="../../GodotTypeProvider/src/GodotTypeProvider.Runtime/GodotTypeProvider.Runtime.fsproj" />
     <Reference Include="GodotSharp">
       <HintPath>../.mono/assemblies/Debug/GodotSharp.dll</HintPath>
     </Reference>
@@ -33,7 +32,7 @@
   </PropertyGroup>
   <!--generic extensions to Godot-->
   <ItemGroup>
-    <Compile Include="typeProviderInitializer.fs" />
+    <Compile Include="SceneLoaderHelper.fs" />
     <Compile Include="rand.fs" />
     <Compile Include="defaults.fs" />
     <Compile Include="NodeExtension.fs" />
@@ -50,14 +49,30 @@
 
     <Compile Include="card.fs" />
     <Compile Include="hand.fs" />
+    <Compile Include="generatedNodes/MinimunBarScene.fs"/>
+    <Compile Include="generatedNodes/DoneBarScene.fs"/>
+    <Compile Include="generatedNodes/Bonus1BarScene.fs"/>
+    <Compile Include="generatedNodes/BonusBarScene.fs"/>
     <Compile Include="nodes/BonusBarFs.fs" />
+    <Compile Include="generatedNodes/JoinButtonScene.fs"/>
     <Compile Include="nodes/JoinButtonFs.fs" />
+    <Compile Include="generatedNodes/BlocksButtonScene.fs"/>
+    <Compile Include="generatedNodes/EnemiesButtonScene.fs"/>
+    <Compile Include="generatedNodes/MiscButtonScene.fs"/>
+    <Compile Include="generatedNodes/HandScene.fs"/>
     <Compile Include="nodes/HandFs.fs" />
+    <Compile Include="generatedNodes/EnemyMapScene.fs"/>
+    <Compile Include="generatedNodes/DungeonMapScene.fs"/>
+    <Compile Include="generatedNodes/DoneButtonScene.fs"/>
+    <Compile Include="generatedNodes/EditorNodeScene.fs"/>
     <Compile Include="nodes/EditorFs.fs" />
 
   </ItemGroup>
   <!--guns-->
   <ItemGroup>
+      <Compile Include="generatedNodes/FromRootSpriteScene.fs"/>
+      <Compile Include="generatedNodes/FromRootCollisionShape2DScene.fs"/>
+      <Compile Include="generatedNodes/BulletScene.fs"/>
       <Compile Include="nodes/BulletFs.fs" />
       <Compile Include="gun.fs" />
   </ItemGroup>
@@ -67,13 +82,30 @@
   </ItemGroup>
   <!--Nodes-->
   <ItemGroup>
-
+    <Compile Include="generatedNodes/PlayButtonScene.fs"/>
+    <Compile Include="generatedNodes/MainMenuScene.fs"/>
     <Compile Include="nodes/MainMenuFs.fs" />
     <Compile Include="nodes/firstFs.fs" />
+    <Compile Include="generatedNodes/PlayerSpriteContainerScene.fs"/>
+    <Compile Include="generatedNodes/PlayerCamScene.fs"/>
+    <Compile Include="generatedNodes/PlayerCollisionShape2DScene.fs"/>
+    <Compile Include="generatedNodes/PlayerScene.fs"/>
     <Compile Include="nodes/PlayerFs.fs" />
+    <Compile Include="generatedNodes/Area2DCollisionShape2DScene.fs" />
+    <Compile Include="generatedNodes/FromRootArea2DScene.fs"/>
+    <Compile Include="generatedNodes/RootSpriteScene.fs"/>
     <Compile Include="nodes/EndFs.fs" />
+    <Compile Include="generatedNodes/EnemySpriteScene.fs"/>
+    <Compile Include="generatedNodes/EnemySpriteContainerScene.fs"/>
+    <Compile Include="generatedNodes/FromRootCollisionShape2DScene.fs"/>
+    <Compile Include="generatedNodes/EnemyScene.fs"/>
     <Compile Include="nodes/BasicEnemyFs.fs" />
+    <Compile Include="generatedNodes/NavigatorScene.fs"/>
+    <Compile Include="generatedNodes/HealthBarScene.fs"/>
+    <Compile Include="generatedNodes/GuiLayerScene.fs"/>
+    <Compile Include="generatedNodes/DungeonScene.fs"/>
     <Compile Include="nodes/DungeonFs.fs" />
+    <Compile Include="generatedNodes/SceneManagerScene.fs"/>
     <Compile Include="nodes/SceneManagerFs.fs" />
   </ItemGroup>
 </Project>

@@ -3,8 +3,13 @@ namespace super_dungeon_maker
 open Godot
 open GDUtils
 
-type DungeonFs() as this =
-    inherit Node2D()
+type DungeonProps = {
+    dungeon: System.Collections.Generic.Dictionary<(int * int), Block>;
+    after: unit -> unit
+}
+
+type DungeonFs() =
+    inherit DungeonScene<DungeonProps>()
 
     let roomSize = 64
     let openingSize = 14
@@ -12,22 +17,19 @@ type DungeonFs() as this =
     let endLocation = (3, 3)
     let wall = 0
     let floor = 1
+    let mutable dungeon = System.Collections.Generic.Dictionary()
+    let mutable after = ignore
+ 
+    override this.Setup(a) = 
+        GD.Print "in setup"
+        dungeon <- a.dungeon
+        after <- a.after
 
-
-    let camera = this.getNode<PlayerFs> "./Player"
-
-    let tileMap =
-        this.getNode<TileMap> "./Navigator/DungeonMap"
-
-    let navigator = this.getNode<Navigation2D> "./Navigator"
-
-    let hpBar =
-        this.getNode<ProgressBar> "./GuiLayer/HealthBar"
-
-    member public this.StartDungeon (dungeon: System.Collections.Generic.Dictionary<(int * int), Block>) after =
-        let map = tileMap.Value
+    member public this.StartDungeon () =
+        GD.Print "in start dungeon"
+        let map = this.Navigator.DungeonMap.UnwrappedNode
         map.Clear()
-        hpBar.Value.Visible <- true
+        this.GuiLayer.HealthBar.UnwrappedNode.Visible <- true
 
         let endBlock =
             dungeon.Values
@@ -92,18 +94,18 @@ type DungeonFs() as this =
 
                 match item with
                 | Items.Enemy enemy ->
-                    let enemyScene =
-                        enemy |> EnemyKinds.toNode |> loadEnemyNode
-
-                    let enemyNode = enemyScene.Instance() :?> BasicEnemyFs
-
-                    enemyNode.GlobalPosition <-
+                    let position = 
                         Vector2(expandedItemX |> float32, expandedItemY |> float32)
                         |> map.MapToWorld
+                    let props = {target=this.Player.Value; navigator=this.Navigator.UnwrappedNode;GlobalPosition=position}
 
-                    enemyNode.Configure camera.Value navigator.Value
-
-                    this.AddChild(enemyNode)
+                    let enemyScene =
+                        enemy |> EnemyKinds.toNode |> loadEnemyNode
+                    
+                    let enemyNode = enemyScene.Instance() :?> BasicEnemyFs
+                    
+                    enemyNode.Setup props
+                    this.AddChild enemyNode
                 | Items.Misc x ->
                     let miscScene = x |> Misc.toNode |> loadMiscNode
                     let miscNode = miscScene.Instance() :?> Node2D
@@ -114,7 +116,7 @@ type DungeonFs() as this =
 
                     match x with
                     | Start ->
-                        camera.Value.GlobalPosition <-
+                        this.Player.Value.GlobalPosition <-
                             Vector2(
                                 (float32 expandedX) + (float32 roomSize) / 2f,
                                 (float32 expandedY) + (float32 roomSize) / 2f
@@ -126,5 +128,6 @@ type DungeonFs() as this =
 
                     this.AddChild miscNode
 
-        camera.Value.EnableCam(fun x -> hpBar.Value.Value <- x)
+        this.Player.Value.EnableCam(fun x -> this.GuiLayer.HealthBar.UnwrappedNode.Value <- x)
         ()
+    override this._Ready () = this.StartDungeon ()

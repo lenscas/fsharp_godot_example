@@ -1,6 +1,7 @@
 namespace super_dungeon_maker
 
 open Godot
+open SceneLoader
 
 type BulletConfig =
     { Func: Node -> unit
@@ -16,15 +17,15 @@ type Gun(shootSpeed, bulletConfig) =
     member public _.Shoot (shooter: Node2D) (parent: Node) =
 
         if timeSinceLastShot < 0f then
-            GD.Print "SHOOT TIME!"
-            let bullet = GD.Load<PackedScene>(bulletConfig.Path)
-            let bulletScript = bullet.Instance() :?> BulletFs
-            bulletScript.GlobalRotation <- shooter.GlobalRotation
-            bulletScript.Velocity <- bulletConfig.Velocity
-            bulletScript.GlobalPosition <- shooter.GlobalPosition
-            bulletScript.CollisionLayer <- bulletConfig.CollisionLayer
-            bulletScript.CollisionMask <- bulletConfig.CollisionMask
-            bulletScript.OnCollisionFunc <- bulletConfig.Func
+            let props = {
+                Rotation = shooter.Rotation;
+                Velocity = bulletConfig.Velocity;
+                GlobalPosition = shooter.GlobalPosition;
+                CollisionLayer = bulletConfig.CollisionLayer;
+                CollisionMask = bulletConfig.CollisionMask;
+                OnCollisionFunc = bulletConfig.Func;
+            }
+            let bulletScript = LoadScene<_,BulletFs> props
             parent.AddChild bulletScript
             timeSinceLastShot <- shootSpeed
 

@@ -3,8 +3,9 @@ namespace super_dungeon_maker
 open Godot
 
 type EndFs() =
-    inherit Sprite()
+    inherit RootSpriteScene<unit>()
 
+    override this.Setup(())= ()
     member val RunOnReached = ignore with get, set
 
     member this.OnObjectGotOverEnd(a: Node) =

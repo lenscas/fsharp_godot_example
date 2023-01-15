@@ -2,23 +2,22 @@ namespace super_dungeon_maker
 
 open Godot
 open GDUtils
+open SceneLoader
 
 type PlayerState =
     | Ready
     | WaitUntilFire of float32
 
 type PlayerFs() as this =
-    inherit KinematicBody2D()
+    inherit PlayerScene()
 
-    let playerSprite =
-        this.getNode<Node2D> "./PlayerSpriteContainer"
 
     let mutable currentHp = 100.
 
     let mutable state = Ready
 
     member public this.EnableCam func =
-        this.GetNode<Camera2D>(new NodePath("./PlayerCam")).Current <- true
+        this.PlayerCam.UnwrappedNode.Current <- true
         this.UpdateHPBar <- func
 
     [<Export>]
@@ -69,26 +68,27 @@ type PlayerFs() as this =
 
         ()
         |> this.GetGlobalMousePosition
-        |> playerSprite.Value.LookAt
+        |> this.PlayerSpriteContainer.UnwrappedNode.LookAt
 
     override this._Input input =
         match (state, input) with
         | (Ready, (:? InputEventMouseButton as button)) ->
             if button.ButtonIndex = (int) ButtonList.Left then
-                let bullet = GD.Load<PackedScene>(this.BulletPath)
-                let bulletScript = bullet.Instance() :?> BulletFs
-                bulletScript.Rotation <- playerSprite.Value.Rotation
-                bulletScript.Velocity <- 10f
-                bulletScript.GlobalPosition <- this.GlobalPosition
-                bulletScript.CollisionLayer <- 0u
-                bulletScript.CollisionMask <- 2u
-
-                bulletScript.OnCollisionFunc <-
+                let collisionFunc = 
                     fun x ->
                         match box x with
                         | :? IEnemy as enemy -> enemy.GotHit()
                         | x -> GD.Print x
-
+                
+                let props = {
+                    Rotation = this.PlayerSpriteContainer.UnwrappedNode.Rotation;
+                    Velocity = 10f;
+                    GlobalPosition = this.GlobalPosition;
+                    CollisionLayer = 0u;
+                    CollisionMask = 2u;
+                    OnCollisionFunc = collisionFunc
+                }
+                let bulletScript = LoadScene<_,BulletFs> props
                 this.GetParent().AddChild bulletScript
                 state <- WaitUntilFire this.CooldownTime
         | (WaitUntilFire x, (:? InputEventMouseButton as button)) ->

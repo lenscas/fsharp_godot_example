@@ -1,10 +1,15 @@
 namespace super_dungeon_maker
 
 open Godot
-open GDUtils
 
-type BasicEnemyFs() as this =
-    inherit KinematicBody2D()
+type BasicEnemyProps = {
+    target: PlayerFs;
+    navigator: Navigation2D;
+    GlobalPosition : Vector2
+}
+
+type BasicEnemyFs() =
+    inherit EnemyScene<BasicEnemyProps>()
 
     let mutable target: Option<PlayerFs> = None
     let mutable navigator: Option<Navigation2D> = None
@@ -27,10 +32,6 @@ type BasicEnemyFs() as this =
                       | :? PlayerFs as player -> player.GotHit()
                       | _ -> () }
         )
-
-
-    let sprite =
-        this.getNode<Node2D> "./EnemySpriteContainer"
 
     let rng = new RandomNumberGenerator()
 
@@ -76,17 +77,18 @@ type BasicEnemyFs() as this =
         at <- 0 //go to point 0
         ()
 
-    member public _.Configure newTarget newNavigator =
+    override this.Setup(a) = this.Configure a.target a.navigator
+    member private _.Configure newTarget newNavigator =
         target <- Some newTarget
         navigator <- Some newNavigator
 
-    override _._Process x =
+    override this._Process x =
         gun._Process x
-        () |> this.GetParent |> gun.Shoot sprite.Value
+        () |> this.GetParent |> gun.Shoot this.EnemySpriteContainer.UnwrappedNode
 
     override this._PhysicsProcess _ =
         match target with
-        | Some target -> sprite.Value.LookAt target.Position
+        | Some target -> this.EnemySpriteContainer.UnwrappedNode.LookAt target.Position
         | None -> ()
 
         match (isActivated, target, navigator) with

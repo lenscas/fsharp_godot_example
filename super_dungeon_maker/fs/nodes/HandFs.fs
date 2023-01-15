@@ -14,7 +14,7 @@ type ToDisplay =
     | Misc
 
 type HandFs() as this =
-    inherit Control()
+    inherit HandScene()
 
     let mutable handState = Nothing
 
@@ -23,9 +23,6 @@ type HandFs() as this =
     let dungeonMap = this.getNode<TileMap> "../DungeonMap"
     let itemMap = this.getNode<TileMap> "../EnemyMap"
 
-    let showBlocks = this.getNode<Button> "./BlocksButton"
-    let showEnemies = this.getNode<Button> "./EnemiesButton"
-    let showMisc = this.getNode<Button> "./MiscButton"
 
     let mutable toShowState = ToDisplay.Blocks
 
@@ -50,15 +47,15 @@ type HandFs() as this =
 
     let miscHand = Hand.newHand [ 1, Misc.Start ]
 
-    let showMaker (a: Lazy<Button>) (b: Lazy<Button>) (c: Lazy<Button>) d =
+    let showMaker (a: Button) (b: Button) (c: Button) d =
         match toShowState with
         | ToDisplay.Blocks -> Hand.turnHandOff blockHand
         | ToDisplay.Enemies -> Hand.turnHandOff enemyHand
         | ToDisplay.Misc -> Hand.turnHandOff miscHand
 
-        a.Value.Disabled <- true
-        b.Value.Disabled <- false
-        c.Value.Disabled <- false
+        a.Disabled <- true
+        b.Disabled <- false
+        c.Disabled <- false
         toShowState <- d
 
     member val UpdateCostBar: int -> unit = ignore with get, set
@@ -86,7 +83,7 @@ type HandFs() as this =
         drawer (fun x -> ("pressed", this, "ClickedItem", (SParam x))) this
 
     override this._Ready() =
-        showMaker showBlocks showEnemies showMisc ToDisplay.Blocks
+        showMaker this.BlocksButton.UnwrappedNode this.EnemiesButton.UnwrappedNode this.MiscButton.UnwrappedNode ToDisplay.Blocks
         this.DrawHand()
 
     override this._Input event =
@@ -227,13 +224,13 @@ type HandFs() as this =
         |> Seq.contains Misc.Start
 
     member this.OnBlocksPressed() =
-        showMaker showBlocks showEnemies showMisc ToDisplay.Blocks
+        showMaker this.BlocksButton.UnwrappedNode this.EnemiesButton.UnwrappedNode this.MiscButton.UnwrappedNode ToDisplay.Blocks
         this.DrawHand()
 
     member this.OnEnemiesPressed() =
-        showMaker showEnemies showBlocks showMisc ToDisplay.Enemies
+        showMaker this.EnemiesButton.UnwrappedNode this.BlocksButton.UnwrappedNode this.MiscButton.UnwrappedNode ToDisplay.Enemies
         this.DrawHand()
 
     member this.OnMiscPressed() =
-        showMaker showMisc showBlocks showEnemies ToDisplay.Misc
+        showMaker this.MiscButton.UnwrappedNode this.BlocksButton.UnwrappedNode this.EnemiesButton.UnwrappedNode ToDisplay.Misc
         this.DrawHand()
